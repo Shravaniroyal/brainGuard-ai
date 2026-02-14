@@ -1,7 +1,6 @@
 """
 BrainGuard AI - Brain MRI Analysis
-Neuroscience-themed design with medical color palette
-Cloud-optimized version (no heavy PyTorch dependency)
+Clean medical design - white background, readable text, brain-themed accents
 """
 
 import streamlit as st
@@ -14,7 +13,6 @@ import io
 import os
 from datetime import datetime
 
-# Try importing heavy libraries - graceful fallback if not available
 try:
     import torch
     import torch.nn as nn
@@ -34,7 +32,6 @@ try:
 except ImportError:
     SKIMAGE_AVAILABLE = False
 
-# Page config
 st.set_page_config(
     page_title="BrainGuard AI - Brain Analysis",
     page_icon="🧠",
@@ -42,352 +39,243 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# BRAINGUARD AI - Deep Blue/Purple Brain Theme
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-    
-    /* ── Base ── */
-    .stApp, .main, .block-container {
-        background: #f0f4ff !important;
-        font-family: 'Poppins', sans-serif;
-    }
-    
-    header[data-testid="stHeader"] {
-        background-color: #0f0c29 !important;
-    }
-    header[data-testid="stHeader"] * {
-        color: white !important;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    /* ── Hero Header ── */
-    .neuro-header {
-        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-        padding: 2.5rem 2rem;
-        border-radius: 20px;
-        text-align: center;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 40px rgba(48, 43, 99, 0.4);
-        border: 1px solid rgba(255,255,255,0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .neuro-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 60%);
-        animation: pulse 4s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 0.5; }
-        50% { transform: scale(1.1); opacity: 1; }
-    }
+/* ── GLOBAL ── */
+html, body, .stApp, .main, .block-container {
+    background-color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #111827 !important;
+}
 
-    .neuro-header h1 {
-        color: #ffffff !important;
-        font-size: 3.2rem;
-        font-weight: 800;
-        margin: 0;
-        letter-spacing: -1px;
-        text-shadow: 0 0 30px rgba(99,102,241,0.8);
-    }
+/* ── TOP NAV ── */
+header[data-testid="stHeader"] {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e5e7eb;
+}
 
-    .neuro-header p {
-        color: rgba(199,210,254,0.95) !important;
-        font-size: 1.1rem;
-        margin: 0.7rem 0 0 0;
-        font-weight: 400;
-        letter-spacing: 0.5px;
-    }
+/* ── HERO HEADER ── */
+.bg-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f4c75 100%);
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(15,23,42,0.3);
+}
+.bg-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(56,189,248,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(99,102,241,0.1) 0%, transparent 60%);
+}
+.hero-title {
+    font-size: 3rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 1;
+}
+.hero-sub {
+    font-size: 1.1rem !important;
+    color: #bae6fd !important;
+    margin: 0.6rem 0 0 !important;
+    font-weight: 400 !important;
+    position: relative;
+    z-index: 1;
+}
 
-    /* ── Stat Cards ── */
-    .stat-card {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        border: 1px solid rgba(99,102,241,0.4);
-        border-radius: 16px;
-        padding: 1.8rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(49,46,129,0.3);
-    }
+/* ── STAT CARDS ── */
+.stat-card {
+    background: #ffffff;
+    border: 2px solid #e0f2fe;
+    border-radius: 16px;
+    padding: 1.8rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(14,165,233,0.08);
+    transition: all 0.25s ease;
+}
+.stat-card:hover {
+    border-color: #38bdf8;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(14,165,233,0.15);
+}
+.stat-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #0369a1 !important;
+    margin: 0;
+    line-height: 1;
+}
+.stat-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b !important;
+    margin-top: 0.5rem;
+}
 
-    .stat-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 40px rgba(99,102,241,0.4);
-        border-color: #6366f1;
-    }
+/* ── SIDEBAR ── */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%) !important;
+}
+[data-testid="stSidebar"] * { color: #e0f2fe !important; }
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] strong { color: #ffffff !important; }
+.sidebar-badge {
+    background: rgba(56,189,248,0.12);
+    border-left: 3px solid #38bdf8;
+    padding: 0.65rem 1rem;
+    margin: 0.35rem 0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
 
-    .stat-number {
-        font-size: 2.8rem;
-        font-weight: 800;
-        color: #a5b4fc !important;
-        margin: 0;
-        -webkit-text-fill-color: #a5b4fc;
-    }
+/* ── BUTTONS ── */
+.stButton>button {
+    background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    box-shadow: 0 4px 14px rgba(3,105,161,0.35) !important;
+    transition: all 0.25s !important;
+}
+.stButton>button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(3,105,161,0.45) !important;
+}
+.stDownloadButton>button {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 14px rgba(5,150,105,0.3) !important;
+}
 
-    .stat-label {
-        color: #c7d2fe !important;
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
-        -webkit-text-fill-color: #c7d2fe;
-    }
+/* ── TABS ── */
+.stTabs [data-baseweb="tab-list"] {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+}
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    color: #475569 !important;
+    font-weight: 600;
+    border-radius: 8px;
+}
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%) !important;
+    color: #ffffff !important;
+}
 
-    /* ── Sidebar ── */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0f0c29 0%, #1e1b4b 60%, #312e81 100%) !important;
-    }
+/* ── FILE UPLOADER ── */
+[data-testid="stFileUploader"] {
+    background: #f0f9ff !important;
+    border: 2px dashed #38bdf8 !important;
+    border-radius: 14px !important;
+}
+[data-testid="stFileUploader"] * { color: #0369a1 !important; }
 
-    [data-testid="stSidebar"] * {
-        color: #e0e7ff !important;
-    }
+/* ── METRICS ── */
+[data-testid="stMetric"] {
+    background: #f8fafc;
+    border: 2px solid #e0f2fe;
+    border-radius: 12px;
+    padding: 1rem;
+}
+[data-testid="stMetricValue"] { color: #0369a1 !important; font-weight: 700 !important; }
+[data-testid="stMetricLabel"] { color: #475569 !important; font-weight: 600 !important; }
 
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] strong {
-        color: #ffffff !important;
-    }
+/* ── INFO BOXES ── */
+.info-box {
+    background: #f0f9ff;
+    border-left: 4px solid #0ea5e9;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    color: #0c4a6e !important;
+}
+.info-box strong { color: #0369a1 !important; }
 
-    .sidebar-badge {
-        background: rgba(99,102,241,0.2);
-        border-left: 3px solid #6366f1;
-        padding: 0.7rem 1rem;
-        margin: 0.4rem 0;
-        border-radius: 8px;
-        transition: all 0.2s;
-    }
+.alert-critical {
+    background: #fff1f2;
+    border-left: 4px solid #e11d48;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+}
+.alert-critical * { color: #881337 !important; }
 
-    .sidebar-badge:hover {
-        background: rgba(99,102,241,0.35);
-        border-left-color: #a5b4fc;
-    }
+.alert-success {
+    background: #f0fdf4;
+    border-left: 4px solid #10b981;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+}
+.alert-success * { color: #14532d !important; }
 
-    /* ── Buttons ── */
-    .stButton>button {
-        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
-        color: white !important;
-        border: none;
-        border-radius: 10px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        font-size: 1.05rem;
-        box-shadow: 0 4px 15px rgba(79,70,229,0.4);
-        transition: all 0.3s ease;
-    }
+/* ── EXPANDERS ── */
+.streamlit-expanderHeader {
+    background: #f8fafc !important;
+    border: 1.5px solid #e0f2fe !important;
+    border-radius: 10px !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
+}
+.streamlit-expanderHeader:hover { background: #f0f9ff !important; }
 
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(79,70,229,0.5);
-    }
+/* ── PROGRESS ── */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, #0369a1, #0ea5e9, #38bdf8) !important;
+}
 
-    /* ── Download Buttons ── */
-    .stDownloadButton>button {
-        background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-        color: white !important;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(5,150,105,0.3);
-    }
+/* ── NUMBER INPUT ── */
+.stNumberInput input {
+    background: #ffffff !important;
+    border: 2px solid #bae6fd !important;
+    border-radius: 8px !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
+}
 
-    .stDownloadButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(5,150,105,0.4);
-    }
+/* ── ALL TEXT READABLE ── */
+p, span, label, li { color: #111827 !important; }
+h1, h2, h3, h4 { color: #0f172a !important; }
+.stMarkdown p, .stMarkdown li { color: #111827 !important; }
+.stMarkdown strong, .stMarkdown b { color: #0369a1 !important; font-weight: 700 !important; }
+.stWrite { color: #111827 !important; }
 
-    /* ── Tabs ── */
-    .stTabs [data-baseweb="tab-list"] {
-        background: #1e1b4b;
-        border-radius: 12px;
-        padding: 0.4rem;
-        gap: 0.4rem;
-    }
+/* ── DIVIDER ── */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #bae6fd, transparent);
+    margin: 1.5rem 0;
+}
 
-    .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        color: #a5b4fc !important;
-        font-weight: 600;
-        border-radius: 8px;
-        padding: 0.6rem 1.5rem;
-    }
-
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-        color: white !important;
-    }
-
-    /* ── File Uploader ── */
-    [data-testid="stFileUploader"] {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        border: 2px dashed #6366f1;
-        border-radius: 14px;
-        padding: 2rem;
-        transition: all 0.3s;
-    }
-
-    [data-testid="stFileUploader"]:hover {
-        border-color: #a5b4fc;
-        box-shadow: 0 0 20px rgba(99,102,241,0.3);
-    }
-
-    [data-testid="stFileUploader"] label,
-    [data-testid="stFileUploader"] span,
-    [data-testid="stFileUploader"] p {
-        color: #c7d2fe !important;
-    }
-
-    /* ── Metric Cards ── */
-    [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        padding: 1.2rem;
-        border-radius: 12px;
-        border: 1px solid rgba(99,102,241,0.3);
-        box-shadow: 0 4px 15px rgba(49,46,129,0.3);
-    }
-
-    [data-testid="stMetricValue"] {
-        color: #a5b4fc !important;
-        font-weight: 700;
-    }
-
-    [data-testid="stMetricLabel"] {
-        color: #c7d2fe !important;
-        font-weight: 600;
-    }
-
-    /* ── Info/Alert Boxes ── */
-    .medical-info {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        border-left: 5px solid #6366f1;
-        padding: 1.2rem;
-        border-radius: 12px;
-        margin: 1rem 0;
-        color: #e0e7ff !important;
-    }
-
-    .medical-info strong { color: #a5b4fc !important; }
-
-    .alert-critical {
-        background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
-        border-left: 5px solid #ef4444;
-        padding: 1.2rem;
-        border-radius: 12px;
-        margin: 1rem 0;
-    }
-    .alert-critical * { color: #fecaca !important; }
-
-    .alert-warning {
-        background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
-        border-left: 5px solid #f59e0b;
-        padding: 1.2rem;
-        border-radius: 12px;
-        margin: 1rem 0;
-    }
-    .alert-warning * { color: #fde68a !important; }
-
-    .alert-success {
-        background: linear-gradient(135deg, #052e16 0%, #14532d 100%);
-        border-left: 5px solid #10b981;
-        padding: 1.2rem;
-        border-radius: 12px;
-        margin: 1rem 0;
-    }
-    .alert-success * { color: #a7f3d0 !important; }
-
-    /* ── Expanders ── */
-    .streamlit-expanderHeader {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        border: 1px solid rgba(99,102,241,0.4);
-        border-radius: 10px;
-        font-weight: 600;
-        color: #c7d2fe !important;
-    }
-
-    .streamlit-expanderHeader:hover {
-        background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
-    }
-
-    /* ── Progress Bar ── */
-    .stProgress > div > div > div {
-        background: linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #a5b4fc 100%) !important;
-    }
-
-    /* ── Number Input ── */
-    .stNumberInput input {
-        background: #1e1b4b !important;
-        border: 2px solid #6366f1;
-        border-radius: 8px;
-        color: #e0e7ff !important;
-        font-weight: 600;
-    }
-
-    /* ── Text ── */
-    p, span, div, label { color: #1a1a2e !important; }
-    h1, h2, h3 { color: #0f0c29 !important; }
-    
-    /* Main content area - white background for readability */
-    .main, .block-container {
-        background: #ffffff !important;
-    }
-    
-    /* Markdown text */
-    .stMarkdown p, .stMarkdown li, .stMarkdown span {
-        color: #1a1a2e !important;
-        font-size: 1rem;
-    }
-    
-    /* Bold text */
-    strong, b {
-        color: #0f0c29 !important;
-        font-weight: 700;
-    }
-    
-    /* Tab content text */
-    .stTabs [data-baseweb="tab-panel"] p,
-    .stTabs [data-baseweb="tab-panel"] li,
-    .stTabs [data-baseweb="tab-panel"] span {
-        color: #1a1a2e !important;
-    }
-    
-    /* Headings in main content */
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-        color: #312e81 !important;
-        font-weight: 700;
-    }
-    
-    /* Section headers */
-    h2, h3 {
-        color: #312e81 !important;
-    }
-
-    /* ── Divider ── */
-    hr {
-        border: none;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #6366f1, transparent);
-        margin: 2rem 0;
-    }
-
-    /* ── Brain pulse animation ── */
-    @keyframes brainPulse {
-        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px #6366f1); }
-        50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #a5b4fc); }
-    }
-
-    .brain-icon {
-        animation: brainPulse 2.5s ease-in-out infinite;
-        display: inline-block;
-    }
+/* ── BRAIN PULSE ── */
+@keyframes brainPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+.brain-icon { animation: brainPulse 2.5s ease-in-out infinite; display: inline-block; }
 </style>
 """, unsafe_allow_html=True)
-    
 
 
 # ============================================================================
@@ -699,9 +587,9 @@ def create_visualization(mri_data, results, patient_age):
 def main():
     # Header with brain theme
     st.markdown("""
-    <div class="neuro-header">
-        <h1><span class="brain-icon">🧠</span> BrainGuard AI</h1>
-        <p>Advanced Brain MRI Analysis • 7 AI Models • Medical-Grade Diagnostics</p>
+    <div class="bg-hero">
+        <div class="hero-title"><span class="brain-icon">&#129504;</span> BrainGuard AI</div>
+        <div class="hero-sub">Advanced Brain MRI Analysis &nbsp;&bull;&nbsp; 7 AI Models &nbsp;&bull;&nbsp; Medical-Grade Diagnostics</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -783,7 +671,7 @@ def main():
         st.markdown("### 📤 Upload Brain MRI Scan")
         
         st.markdown("""
-        <div class="medical-info">
+        <div class="info-box">
             <strong>📋 Instructions:</strong> Upload any brain MRI file — 
             NIfTI (.nii, .nii.gz), Image (.jpg, .jpeg, .png), or DICOM (.dcm).
             Enter the patient's age and click Analyze.
