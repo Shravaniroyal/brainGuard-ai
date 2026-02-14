@@ -50,24 +50,19 @@ html, body, .stApp, .main, .block-container {
     color: #111827 !important;
 }
 
-/* ── TOP NAV ICONS FORCE WHITE ── */
+/* ── TOP NAV ── */
 header[data-testid="stHeader"] {
-    background-color: #0f172a !important;
-    border-bottom: 1px solid #1e3a5f;
+    background-color: #e0f2fe !important;
+    border-bottom: 2px solid #0369a1;
 }
-header * { color: #ffffff !important; fill: #ffffff !important; }
-header svg { fill: #ffffff !important; stroke: #ffffff !important; }
-header svg path { fill: #ffffff !important; stroke: #ffffff !important; }
-header svg circle { fill: #ffffff !important; stroke: #ffffff !important; }
-header svg rect { fill: #ffffff !important; }
-header button { color: #ffffff !important; background: transparent !important; }
-header span { color: #ffffff !important; }
-[data-testid="stToolbarActions"] { background: #0f172a !important; }
-[data-testid="stToolbarActions"] * { color: #ffffff !important; fill: #ffffff !important; }
-[data-testid="stToolbarActions"] svg * { fill: #ffffff !important; stroke: #ffffff !important; }
-button[data-testid="baseButton-header"] { background: #1e3a5f !important; border-radius: 6px !important; }
-button[data-testid="baseButton-header"] svg { fill: #ffffff !important; }
-button[data-testid="baseButton-header"] svg path { fill: #ffffff !important; }
+header * { color: #0f172a !important; fill: #0f172a !important; }
+header svg { fill: #0f172a !important; stroke: #0f172a !important; }
+header svg path { fill: #0f172a !important; }
+header button { color: #0f172a !important; background: transparent !important; }
+header span { color: #0f172a !important; }
+[data-testid="stToolbarActions"] { background: #e0f2fe !important; }
+[data-testid="stToolbarActions"] * { color: #0f172a !important; fill: #0f172a !important; }
+[data-testid="stToolbarActions"] svg * { fill: #0f172a !important; }
 
 /* ── HERO HEADER ── */
 .bg-hero {
