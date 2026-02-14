@@ -55,43 +55,19 @@ header[data-testid="stHeader"] {
     background-color: #0f172a !important;
     border-bottom: 1px solid #1e3a5f;
 }
-header[data-testid="stHeader"] * {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-header[data-testid="stHeader"] button {
-    color: #ffffff !important;
-    background: transparent !important;
-}
-header[data-testid="stHeader"] svg {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-    color: #ffffff !important;
-}
-[data-testid="stToolbar"] * {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-[data-testid="stToolbarActions"] svg {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}
-[data-testid="stToolbarActions"] button {
-    color: #ffffff !important;
-}
-/* Share button text */
-[data-testid="stToolbarActions"] span {
-    color: #ffffff !important;
-}
-/* The white square app menu button */
-button[kind="header"] {
-    background: #1e3a5f !important;
-    border: 1px solid #38bdf8 !important;
-    border-radius: 6px !important;
-}
-button[kind="header"] svg {
-    fill: #ffffff !important;
-}
+header * { color: #ffffff !important; fill: #ffffff !important; }
+header svg { fill: #ffffff !important; stroke: #ffffff !important; }
+header svg path { fill: #ffffff !important; stroke: #ffffff !important; }
+header svg circle { fill: #ffffff !important; stroke: #ffffff !important; }
+header svg rect { fill: #ffffff !important; }
+header button { color: #ffffff !important; background: transparent !important; }
+header span { color: #ffffff !important; }
+[data-testid="stToolbarActions"] { background: #0f172a !important; }
+[data-testid="stToolbarActions"] * { color: #ffffff !important; fill: #ffffff !important; }
+[data-testid="stToolbarActions"] svg * { fill: #ffffff !important; stroke: #ffffff !important; }
+button[data-testid="baseButton-header"] { background: #1e3a5f !important; border-radius: 6px !important; }
+button[data-testid="baseButton-header"] svg { fill: #ffffff !important; }
+button[data-testid="baseButton-header"] svg path { fill: #ffffff !important; }
 
 /* ── HERO HEADER ── */
 .bg-hero {
