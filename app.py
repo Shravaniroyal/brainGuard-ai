@@ -36,340 +36,327 @@ except ImportError:
 
 # Page config
 st.set_page_config(
-    page_title="NeuroScan AI - Brain Analysis",
+    page_title="BrainGuard AI - Brain Analysis",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# NEUROSCIENCE-THEMED CSS - Brain/Medical Colors
+# BRAINGUARD AI - Deep Blue/Purple Brain Theme
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
     
-    /* Force white background everywhere */
+    /* ── Base ── */
     .stApp, .main, .block-container {
-        background: #ffffff !important;
+        background: #f0f4ff !important;
         font-family: 'Poppins', sans-serif;
     }
     
-    /* FIX: Top navigation bar - make it white */
     header[data-testid="stHeader"] {
-        background-color: #ffffff !important;
+        background-color: #0f0c29 !important;
     }
-    
-    /* FIX: Top toolbar background */
-    .stAppHeader {
-        background-color: #ffffff !important;
+    header[data-testid="stHeader"] * {
+        color: white !important;
     }
-    
-    /* FIX: Make sure deploy button is visible */
-    header[data-testid="stHeader"] button {
-        color: #0ea5e9 !important;
-        border: 2px solid #0ea5e9 !important;
-    }
-    
-    /* Neuroscience gradient header */
+
+    /* ── Hero Header ── */
     .neuro-header {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #10b981 100%);
-        padding: 2rem;
-        border-radius: 16px;
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
         text-align: center;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 32px rgba(14, 165, 233, 0.2);
+        box-shadow: 0 8px 40px rgba(48, 43, 99, 0.4);
+        border: 1px solid rgba(255,255,255,0.1);
+        position: relative;
+        overflow: hidden;
     }
     
+    .neuro-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 60%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 1; }
+    }
+
     .neuro-header h1 {
-        color: white !important;
-        font-size: 3rem;
-        font-weight: 700;
+        color: #ffffff !important;
+        font-size: 3.2rem;
+        font-weight: 800;
         margin: 0;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        letter-spacing: -1px;
+        text-shadow: 0 0 30px rgba(99,102,241,0.8);
     }
-    
+
     .neuro-header p {
-        color: rgba(255,255,255,0.95) !important;
-        font-size: 1.2rem;
-        margin: 0.5rem 0 0 0;
+        color: rgba(199,210,254,0.95) !important;
+        font-size: 1.1rem;
+        margin: 0.7rem 0 0 0;
         font-weight: 400;
+        letter-spacing: 0.5px;
     }
-    
-    /* Brain-themed stat cards */
+
+    /* ── Stat Cards ── */
     .stat-card {
-        background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 100%);
-        border: 2px solid #06b6d4;
-        border-radius: 12px;
-        padding: 1.5rem;
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border: 1px solid rgba(99,102,241,0.4);
+        border-radius: 16px;
+        padding: 1.8rem;
         text-align: center;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(6, 182, 212, 0.1);
+        box-shadow: 0 4px 20px rgba(49,46,129,0.3);
     }
-    
+
     .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 24px rgba(6, 182, 212, 0.2);
+        transform: translateY(-6px);
+        box-shadow: 0 12px 40px rgba(99,102,241,0.4);
+        border-color: #6366f1;
     }
-    
+
     .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #a5b4fc !important;
         margin: 0;
+        -webkit-text-fill-color: #a5b4fc;
     }
-    
+
     .stat-label {
-        color: #0e7490;
-        font-size: 1rem;
+        color: #c7d2fe !important;
+        font-size: 0.95rem;
         font-weight: 600;
         margin-top: 0.5rem;
+        -webkit-text-fill-color: #c7d2fe;
     }
-    
-    /* Sidebar - Brain theme */
+
+    /* ── Sidebar ── */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0c4a6e 0%, #164e63 100%) !important;
+        background: linear-gradient(180deg, #0f0c29 0%, #1e1b4b 60%, #312e81 100%) !important;
     }
-    
+
     [data-testid="stSidebar"] * {
-        color: #e0f2fe !important;
+        color: #e0e7ff !important;
     }
-    
+
     [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] strong {
         color: #ffffff !important;
     }
-    
+
     .sidebar-badge {
-        background: rgba(6, 182, 212, 0.2);
-        border-left: 3px solid #06b6d4;
-        padding: 0.8rem;
-        margin: 0.5rem 0;
+        background: rgba(99,102,241,0.2);
+        border-left: 3px solid #6366f1;
+        padding: 0.7rem 1rem;
+        margin: 0.4rem 0;
         border-radius: 8px;
+        transition: all 0.2s;
     }
-    
-    /* Medical-grade buttons */
+
+    .sidebar-badge:hover {
+        background: rgba(99,102,241,0.35);
+        border-left-color: #a5b4fc;
+    }
+
+    /* ── Buttons ── */
     .stButton>button {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%) !important;
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
         color: white !important;
         border: none;
         border-radius: 10px;
         padding: 0.75rem 2rem;
         font-weight: 600;
-        font-size: 1.1rem;
-        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        font-size: 1.05rem;
+        box-shadow: 0 4px 15px rgba(79,70,229,0.4);
         transition: all 0.3s ease;
     }
-    
+
     .stButton>button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        box-shadow: 0 8px 25px rgba(79,70,229,0.5);
     }
-    
-    /* Download buttons - emerald theme */
+
+    /* ── Download Buttons ── */
     .stDownloadButton>button {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
         color: white !important;
         border: none;
         border-radius: 10px;
-        padding: 0.6rem 1.5rem;
         font-weight: 600;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 15px rgba(5,150,105,0.3);
     }
-    
+
     .stDownloadButton>button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 8px 25px rgba(5,150,105,0.4);
     }
-    
-    /* Tabs - medical theme */
+
+    /* ── Tabs ── */
     .stTabs [data-baseweb="tab-list"] {
-        background: #f0f9ff;
-        border-radius: 10px;
-        padding: 0.5rem;
-        gap: 0.5rem;
+        background: #1e1b4b;
+        border-radius: 12px;
+        padding: 0.4rem;
+        gap: 0.4rem;
     }
-    
+
     .stTabs [data-baseweb="tab"] {
         background: transparent;
-        color: #0369a1 !important;
+        color: #a5b4fc !important;
         font-weight: 600;
         border-radius: 8px;
-        padding: 0.75rem 1.5rem;
+        padding: 0.6rem 1.5rem;
     }
-    
+
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
         color: white !important;
     }
-    
-    /* File uploader - brain scan theme */
+
+    /* ── File Uploader ── */
     [data-testid="stFileUploader"] {
-        background: linear-gradient(135deg, #f0fdfa 0%, #f0f9ff 100%);
-        border: 3px dashed #06b6d4;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border: 2px dashed #6366f1;
+        border-radius: 14px;
         padding: 2rem;
-        transition: all 0.3s ease;
+        transition: all 0.3s;
     }
-    
+
     [data-testid="stFileUploader"]:hover {
-        border-color: #0ea5e9;
-        background: linear-gradient(135deg, #ecfeff 0%, #e0f2fe 100%);
-        box-shadow: 0 8px 24px rgba(6, 182, 212, 0.15);
+        border-color: #a5b4fc;
+        box-shadow: 0 0 20px rgba(99,102,241,0.3);
     }
-    
+
     [data-testid="stFileUploader"] label,
-    [data-testid="stFileUploader"] span {
-        color: #0e7490 !important;
-        font-weight: 500;
+    [data-testid="stFileUploader"] span,
+    [data-testid="stFileUploader"] p {
+        color: #c7d2fe !important;
     }
-    
-    /* Medical info box */
+
+    /* ── Metric Cards ── */
+    [data-testid="stMetric"] {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        padding: 1.2rem;
+        border-radius: 12px;
+        border: 1px solid rgba(99,102,241,0.3);
+        box-shadow: 0 4px 15px rgba(49,46,129,0.3);
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #a5b4fc !important;
+        font-weight: 700;
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #c7d2fe !important;
+        font-weight: 600;
+    }
+
+    /* ── Info/Alert Boxes ── */
     .medical-info {
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        border-left: 5px solid #2563eb;
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border-left: 5px solid #6366f1;
         padding: 1.2rem;
-        border-radius: 10px;
+        border-radius: 12px;
         margin: 1rem 0;
-        color: #1e3a8a !important;
+        color: #e0e7ff !important;
     }
-    
-    .medical-info strong {
-        color: #1e40af !important;
-    }
-    
-    /* Alert boxes - medical color coding */
+
+    .medical-info strong { color: #a5b4fc !important; }
+
     .alert-critical {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        border-left: 5px solid #dc2626;
+        background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+        border-left: 5px solid #ef4444;
         padding: 1.2rem;
-        border-radius: 10px;
+        border-radius: 12px;
         margin: 1rem 0;
     }
-    
-    .alert-critical * {
-        color: #7f1d1d !important;
-    }
-    
+    .alert-critical * { color: #fecaca !important; }
+
     .alert-warning {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
         border-left: 5px solid #f59e0b;
         padding: 1.2rem;
-        border-radius: 10px;
+        border-radius: 12px;
         margin: 1rem 0;
     }
-    
-    .alert-warning * {
-        color: #78350f !important;
-    }
-    
+    .alert-warning * { color: #fde68a !important; }
+
     .alert-success {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        background: linear-gradient(135deg, #052e16 0%, #14532d 100%);
         border-left: 5px solid #10b981;
         padding: 1.2rem;
-        border-radius: 10px;
+        border-radius: 12px;
         margin: 1rem 0;
     }
-    
-    .alert-success * {
-        color: #064e3b !important;
-    }
-    
-    /* Metric cards */
-    [data-testid="stMetric"] {
-        background: white;
-        padding: 1.2rem;
-        border-radius: 12px;
-        border: 2px solid #e0f2fe;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-    
-    [data-testid="stMetricValue"] {
-        color: #0369a1 !important;
-        font-weight: 700;
-        font-size: 2rem;
-    }
-    
-    [data-testid="stMetricLabel"] {
-        color: #0e7490 !important;
-        font-weight: 600;
-    }
-    
-    /* Expanders - neuroscience theme */
+    .alert-success * { color: #a7f3d0 !important; }
+
+    /* ── Expanders ── */
     .streamlit-expanderHeader {
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        border: 2px solid #0ea5e9;
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border: 1px solid rgba(99,102,241,0.4);
         border-radius: 10px;
         font-weight: 600;
-        color: #0c4a6e !important;
+        color: #c7d2fe !important;
     }
-    
+
     .streamlit-expanderHeader:hover {
-        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
     }
-    
-    /* Progress bar - brain activity theme */
+
+    /* ── Progress Bar ── */
     .stProgress > div > div > div {
-        background: linear-gradient(90deg, #0ea5e9 0%, #06b6d4 50%, #10b981 100%) !important;
+        background: linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #a5b4fc 100%) !important;
     }
-    
-    /* Number input */
+
+    /* ── Number Input ── */
     .stNumberInput input {
-        border: 2px solid #67e8f9;
+        background: #1e1b4b !important;
+        border: 2px solid #6366f1;
         border-radius: 8px;
-        color: #0c4a6e !important;
+        color: #e0e7ff !important;
         font-weight: 600;
-        background: white !important;
     }
-    
-    .stNumberInput input:focus {
-        border-color: #0ea5e9;
-        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-    }
-    
-    /* Text area */
-    .stTextArea textarea {
-        border: 2px solid #67e8f9;
-        border-radius: 8px;
-        color: #0c4a6e !important;
-        background: white !important;
-    }
-    
-    /* All text dark by default */
-    p, span, div, label {
-        color: #1e293b !important;
-    }
-    
-    h1, h2, h3 {
-        color: #0f172a !important;
-    }
-    
-    /* Section divider */
+
+    /* ── Text ── */
+    p, span, div, label { color: #e0e7ff !important; }
+    h1, h2, h3 { color: #ffffff !important; }
+
+    /* ── Divider ── */
     hr {
         border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #6366f1, transparent);
         margin: 2rem 0;
     }
-    
-    /* Brain pulse animation for logo */
+
+    /* ── Brain pulse animation ── */
     @keyframes brainPulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px #6366f1); }
+        50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #a5b4fc); }
     }
-    
+
     .brain-icon {
-        animation: brainPulse 2s ease-in-out infinite;
+        animation: brainPulse 2.5s ease-in-out infinite;
         display: inline-block;
     }
 </style>
 """, unsafe_allow_html=True)
+    
 
 
 # ============================================================================
-# MODEL DEFINITIONS (Same as before)
+# MODEL DEFINITIONS
 # ============================================================================
 
 if TORCH_AVAILABLE:
@@ -664,7 +651,7 @@ def create_visualization(mri_data, results, patient_age):
     ax9.set_title('Tumor Screening', fontweight='bold')
     ax9.axis('off')
     
-    plt.suptitle(f'NeuroScan AI - Brain Analysis Report (Age: {patient_age})', fontsize=16, fontweight='bold')
+    plt.suptitle(f'BrainGuard AI - Brain Analysis Report (Age: {patient_age})', fontsize=16, fontweight='bold')
     plt.tight_layout()
     
     return fig
@@ -678,7 +665,7 @@ def main():
     # Header with brain theme
     st.markdown("""
     <div class="neuro-header">
-        <h1><span class="brain-icon">🧠</span> NeuroScan AI</h1>
+        <h1><span class="brain-icon">🧠</span> BrainGuard AI</h1>
         <p>Advanced Brain MRI Analysis • 7 AI Models • Medical-Grade Diagnostics</p>
     </div>
     """, unsafe_allow_html=True)
@@ -714,7 +701,7 @@ def main():
         st.markdown("""
         <div style='text-align: center; padding: 1.5rem 0;'>
             <h1 style='font-size: 2.5rem;'>🧠</h1>
-            <h2>NeuroScan AI</h2>
+            <h2>BrainGuard AI</h2>
             <p style='font-size: 0.9rem;'>Medical-Grade Analysis</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1047,9 +1034,9 @@ def main():
                     st.error(f"❌ Error: {str(e)}")
     
     with tab2:
-        st.markdown("### 🔬 About NeuroScan AI")
+        st.markdown("### 🔬 About BrainGuard AI")
         st.markdown("""
-        NeuroScan AI combines **7 specialized AI models** for comprehensive brain health assessment:
+        BrainGuard AI combines **7 specialized AI models** for comprehensive brain health assessment:
         
         1. **Brain Age Prediction** - 3D CNN trained on 235 subjects
         2. **White Matter Lesion Detection** - Advanced image processing
