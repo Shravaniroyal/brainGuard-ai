@@ -52,8 +52,26 @@ html, body, .stApp, .main, .block-container {
 
 /* ── TOP NAV ── */
 header[data-testid="stHeader"] {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #e5e7eb;
+    background-color: #0f172a !important;
+    border-bottom: 1px solid #1e3a5f;
+}
+header[data-testid="stHeader"] * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+header[data-testid="stHeader"] button {
+    color: #ffffff !important;
+}
+header[data-testid="stHeader"] svg {
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+[data-testid="stToolbar"] {
+    background-color: #0f172a !important;
+}
+[data-testid="stToolbar"] * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
 }
 
 /* ── HERO HEADER ── */
