@@ -758,23 +758,23 @@ def main():
         # Format badges
         st.markdown("""
         <div style='display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;'>
-            <span style='background:#d1fae5; color:#065f46; padding:0.3rem 0.8rem;
+            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
                          border-radius:20px; font-weight:600; font-size:0.85rem;'>
                 ✅ .nii / .nii.gz
             </span>
-            <span style='background:#d1fae5; color:#065f46; padding:0.3rem 0.8rem;
+            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
                          border-radius:20px; font-weight:600; font-size:0.85rem;'>
                 ✅ .jpg / .jpeg
             </span>
-            <span style='background:#d1fae5; color:#065f46; padding:0.3rem 0.8rem;
+            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
                          border-radius:20px; font-weight:600; font-size:0.85rem;'>
                 ✅ .png
             </span>
-            <span style='background:#d1fae5; color:#065f46; padding:0.3rem 0.8rem;
+            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
                          border-radius:20px; font-weight:600; font-size:0.85rem;'>
                 ✅ .dcm
             </span>
-            <span style='background:#d1fae5; color:#065f46; padding:0.3rem 0.8rem;
+            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
                          border-radius:20px; font-weight:600; font-size:0.85rem;'>
                 ✅ .bmp / .tiff
             </span>
@@ -811,7 +811,7 @@ def main():
                 fname = uploaded_file.name.lower()
                 if fname.endswith(('.nii', '.gz')):
                     fmt = "NIfTI 3D Volume"
-                    fmt_color = "#0ea5e9"
+                    fmt_color = "black"
                 elif fname.endswith(('.jpg', '.jpeg', '.png', '.bmp',
                                      '.tiff', '.tif')):
                     fmt = "2D Brain Image"
