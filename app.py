@@ -329,8 +329,43 @@ st.markdown("""
     }
 
     /* ── Text ── */
-    p, span, div, label { color: #e0e7ff !important; }
-    h1, h2, h3 { color: #ffffff !important; }
+    p, span, div, label { color: #1a1a2e !important; }
+    h1, h2, h3 { color: #0f0c29 !important; }
+    
+    /* Main content area - white background for readability */
+    .main, .block-container {
+        background: #ffffff !important;
+    }
+    
+    /* Markdown text */
+    .stMarkdown p, .stMarkdown li, .stMarkdown span {
+        color: #1a1a2e !important;
+        font-size: 1rem;
+    }
+    
+    /* Bold text */
+    strong, b {
+        color: #0f0c29 !important;
+        font-weight: 700;
+    }
+    
+    /* Tab content text */
+    .stTabs [data-baseweb="tab-panel"] p,
+    .stTabs [data-baseweb="tab-panel"] li,
+    .stTabs [data-baseweb="tab-panel"] span {
+        color: #1a1a2e !important;
+    }
+    
+    /* Headings in main content */
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+        color: #312e81 !important;
+        font-weight: 700;
+    }
+    
+    /* Section headers */
+    h2, h3 {
+        color: #312e81 !important;
+    }
 
     /* ── Divider ── */
     hr {
@@ -758,24 +793,24 @@ def main():
         # Format badges
         st.markdown("""
         <div style='display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;'>
-            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
-                         border-radius:20px; font-weight:600; font-size:0.85rem;'>
+            <span style='background:#312e81; color:#a5b4fc; padding:0.3rem 0.8rem;
+                         border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid #6366f1;'>
                 ✅ .nii / .nii.gz
             </span>
-            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
-                         border-radius:20px; font-weight:600; font-size:0.85rem;'>
+            <span style='background:#312e81; color:#a5b4fc; padding:0.3rem 0.8rem;
+                         border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid #6366f1;'>
                 ✅ .jpg / .jpeg
             </span>
-            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
-                         border-radius:20px; font-weight:600; font-size:0.85rem;'>
+            <span style='background:#312e81; color:#a5b4fc; padding:0.3rem 0.8rem;
+                         border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid #6366f1;'>
                 ✅ .png
             </span>
-            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
-                         border-radius:20px; font-weight:600; font-size:0.85rem;'>
+            <span style='background:#312e81; color:#a5b4fc; padding:0.3rem 0.8rem;
+                         border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid #6366f1;'>
                 ✅ .dcm
             </span>
-            <span style='background:#d1fae5; color:red; padding:0.3rem 0.8rem;
-                         border-radius:20px; font-weight:600; font-size:0.85rem;'>
+            <span style='background:#312e81; color:#a5b4fc; padding:0.3rem 0.8rem;
+                         border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid #6366f1;'>
                 ✅ .bmp / .tiff
             </span>
         </div>
@@ -811,7 +846,7 @@ def main():
                 fname = uploaded_file.name.lower()
                 if fname.endswith(('.nii', '.gz')):
                     fmt = "NIfTI 3D Volume"
-                    fmt_color = "black"
+                    fmt_color = "#0ea5e9"
                 elif fname.endswith(('.jpg', '.jpeg', '.png', '.bmp',
                                      '.tiff', '.tif')):
                     fmt = "2D Brain Image"
