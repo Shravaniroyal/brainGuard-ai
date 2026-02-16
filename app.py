@@ -722,6 +722,111 @@ def main():
                 help="Supports NIfTI, JPG, PNG, DICOM formats"
             )
 
+        # ── SAMPLE IMAGES ──────────────────────────────────────────────
+        st.markdown("---")
+        st.markdown("### 🧪 Don't have a brain MRI? Try our sample scans!")
+        st.markdown("""
+        <div class="info-box">
+            <strong>💡 Quick Test:</strong> Download a sample image below, 
+            then upload it above to see BrainGuard AI in action instantly!
+        </div>
+        """, unsafe_allow_html=True)
+
+        import base64 as _b64
+        
+        # Load sample images
+        try:
+            with open('sample_brain_normal.png', 'rb') as f:
+                normal_bytes = f.read()
+            with open('sample_brain_aged.png', 'rb') as f:
+                aged_bytes = f.read()
+        except:
+            # Generate on the fly if files not present
+            import numpy as np
+            from PIL import Image as PILImage
+            from scipy.ndimage import gaussian_filter
+            from io import BytesIO
+
+            def _make_brain(seed, aged=False):
+                np.random.seed(seed)
+                size = 256
+                img = np.zeros((size, size), dtype=np.float32)
+                c = size // 2
+                Y, X = np.ogrid[:size, :size]
+                img[((X-c)**2 + (Y-c)**2) < (c-8)**2] = 0.15
+                ba, bb = c-20, c-15
+                img[((X-c)**2/ba**2 + (Y-c)**2/bb**2) < 1] = 0.55
+                img[((X-c)**2/(ba-20)**2 + (Y-c)**2/(bb-20)**2) < 1] = 0.75
+                vr = 12 if aged else 8
+                img[((X-(c-15))**2/vr**2 + (Y-(c-5))**2/(vr+4)**2) < 1] = 0.08
+                img[((X-(c+15))**2/vr**2 + (Y-(c-5))**2/(vr+4)**2) < 1] = 0.08
+                if aged:
+                    for _ in range(8):
+                        lx = c + np.random.randint(-30,30)
+                        ly = c + np.random.randint(-25,25)
+                        img[((X-lx)**2+(Y-ly)**2) < 5] = 0.93
+                img = np.clip(img + np.random.normal(0,0.03,img.shape), 0, 1)
+                img = gaussian_filter(img, 0.8)
+                pil = PILImage.fromarray((img*255).astype(np.uint8), 'L').convert('RGB')
+                buf = BytesIO()
+                pil.save(buf, format='PNG')
+                return buf.getvalue()
+
+            normal_bytes = _make_brain(42, aged=False)
+            aged_bytes   = _make_brain(99, aged=True)
+
+        # Show previews + download buttons
+        s1, s2 = st.columns(2)
+
+        with s1:
+            st.markdown("""
+            <div style='background:#f0f9ff; border:2px solid #bae6fd; border-radius:14px; 
+                        padding:1rem; text-align:center;'>
+                <div style='font-size:1.1rem; font-weight:700; color:#0369a1;'>
+                    &#129504; Sample 1 — Normal Brain
+                </div>
+                <div style='font-size:0.85rem; color:#475569; margin-top:0.3rem;'>
+                    Age: 45 years &nbsp;|&nbsp; Healthy adult MRI
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.image(normal_bytes, use_container_width=True)
+            st.download_button(
+                label="⬇️ Download Sample 1 (Normal)",
+                data=normal_bytes,
+                file_name="sample_brain_normal.png",
+                mime="image/png",
+                use_container_width=True,
+                key="dl_normal"
+            )
+            st.caption("Upload this above → set age to 45 → click Analyze")
+
+        with s2:
+            st.markdown("""
+            <div style='background:#fff7ed; border:2px solid #fed7aa; border-radius:14px; 
+                        padding:1rem; text-align:center;'>
+                <div style='font-size:1.1rem; font-weight:700; color:#c2410c;'>
+                    &#129504; Sample 2 — Aged Brain
+                </div>
+                <div style='font-size:0.85rem; color:#475569; margin-top:0.3rem;'>
+                    Age: 78 years &nbsp;|&nbsp; Shows atrophy + lesions
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.image(aged_bytes, use_container_width=True)
+            st.download_button(
+                label="⬇️ Download Sample 2 (Aged)",
+                data=aged_bytes,
+                file_name="sample_brain_aged.png",
+                mime="image/png",
+                use_container_width=True,
+                key="dl_aged"
+            )
+            st.caption("Upload this above → set age to 78 → click Analyze")
+
+        st.markdown("---")
+        # ── END SAMPLE IMAGES ───────────────────────────────────────────
+
         with col2:
             patient_age = st.number_input(
                 "Patient Age",
