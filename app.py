@@ -1,4 +1,4 @@
-"""BrainGuard AI - GUARANTEED WORKING VERSION"""
+"""BrainGuard AI - GUARANTEED WORKING VERSION v2"""
 import streamlit as st
 import numpy as np
 from PIL import Image
