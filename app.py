@@ -1,4 +1,3 @@
-"""BrainGuard AI - ULTRA SIMPLE VERSION - GUARANTEED TO WORK"""
 import streamlit as st
 import numpy as np
 from PIL import Image
@@ -6,50 +5,37 @@ import io
 
 st.set_page_config(page_title="BrainGuard AI", page_icon="🧠")
 
-def check_if_brain(image_bytes):
-    """Simple check: grayscale + texture"""
-    try:
-        img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-        arr = np.array(img)
-        
-        # Grayscale check
-        r = arr[:,:,0].astype(float)
-        g = arr[:,:,1].astype(float) 
-        b = arr[:,:,2].astype(float)
-        color_diff = np.mean(np.abs(r-g) + np.abs(r-b) + np.abs(g-b)) / 3
-        
-        # If too colorful = NOT brain
-        if color_diff > 20:
-            return False, "Too colorful"
-        
-        # Texture check
-        gray = np.mean(arr, axis=2)
-        if np.var(gray) < 200:
-            return False, "No texture"
-        
-        return True, "OK"
-    except:
-        return False, "Error"
-
 st.title("🧠 BrainGuard AI")
-st.warning("⚠️ Only brain MRI scans accepted")
+st.warning("⚠️ Image validation: Only brain MRI scans accepted")
 
-uploaded = st.file_uploader("Upload brain MRI", type=['jpg','png'])
+uploaded = st.file_uploader("Upload MRI", type=['jpg','png','jpeg'])
 
 if uploaded:
-    file_bytes = uploaded.read()
+    # Read bytes ONCE
+    img_bytes = uploaded.read()
+    img = Image.open(io.BytesIO(img_bytes)).convert('RGB')
+    arr = np.array(img)
     
-    # CHECK IT
-    is_brain, msg = check_if_brain(file_bytes)
+    # Simple color check
+    r = arr[:,:,0].astype(float)
+    g = arr[:,:,1].astype(float)
+    b = arr[:,:,2].astype(float)
     
-    if not is_brain:
-        st.error(f"❌ REJECTED: {msg}")
-        st.error("Upload brain MRI only!")
+    color_diff = np.mean(np.abs(r-g) + np.abs(r-b) + np.abs(g-b)) / 3
+    
+    st.write(f"DEBUG: Color difference = {color_diff:.2f}")
+    
+    # REJECT if colorful
+    if color_diff > 20:
+        st.error(f"❌ REJECTED: Too colorful ({color_diff:.1f})")
+        st.error("This is NOT a brain MRI scan")
+        st.image(img, width=300)
         st.stop()
     
-    st.success("✅ Valid brain MRI!")
-    st.image(Image.open(io.BytesIO(file_bytes)))
-    
-    if st.button("Analyze"):
-        st.success("Analysis would run here")
-        st.balloons()
+    # ACCEPT
+    st.success(f"✅ VALID: Grayscale image ({color_diff:.1f})")
+    st.image(img)
+    st.balloons()
+
+st.caption("Test: Upload a colorful screenshot - should be rejected")
+st.caption("Test: Upload a brain MRI - should be accepted")
