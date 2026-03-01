@@ -44,37 +44,34 @@ def validate_brain_mri(file_bytes):
         g = arr[:, :, 1]
         b = arr[:, :, 2]
 
-        # 1. COLOR CHECK — MRI scans are grayscale; colorful images fail
+        # 1. COLOR CHECK — MRI scans are grayscale
         color_diff = np.mean(np.abs(r - g) + np.abs(r - b) + np.abs(g - b)) / 3
         if color_diff > 18:
-            return False, f"❌ Invalid image — this looks like a colorful photo, not a brain MRI. Please upload a grayscale brain MRI scan."
+            return False, "❌ Invalid image — colorful photo detected, not a brain MRI."
 
-        # 2. TEXTURE CHECK — MRI scans have significant variance
+        # 2. TEXTURE CHECK
         gray = np.mean(arr, axis=2)
         variance = np.var(gray)
         if variance < 150:
-            return False, "❌ Invalid image — no medical imaging texture detected. Please upload a brain MRI scan."
+            return False, "❌ Invalid image — no medical imaging texture detected."
 
-        # 3. BRIGHTNESS CHECK — brain MRIs have dark backgrounds (mean typically 10-120)
-        # Laptop photos, documents, and screenshots are very bright (mean > 150)
+        # 3. BRIGHTNESS CHECK — brain MRIs have dark backgrounds
         mean_intensity = np.mean(gray)
         if mean_intensity > 160:
-            return False, "❌ Invalid image — image is too bright. Brain MRI scans have dark backgrounds. Please upload a valid brain MRI scan."
+            return False, "❌ Invalid image — image is too bright. Brain MRI scans have dark backgrounds."
 
         if mean_intensity < 5:
-            return False, "❌ Invalid image — image is completely black. No scan data detected."
+            return False, "❌ Invalid image — image is completely black."
 
-        # 4. DARK PIXEL RATIO — brain MRIs have mostly dark (black) background
-        # Real MRIs are >30% black pixels; photos/screenshots are mostly bright
+        # 4. DARK PIXEL RATIO — brain MRIs have mostly dark background
         dark_pixels = np.sum(gray < 40) / gray.size
         if dark_pixels < 0.20:
-            return False, "❌ Invalid image — insufficient dark background. Brain MRI scans have predominantly dark backgrounds."
+            return False, "❌ Invalid image — insufficient dark background. Not a brain MRI scan."
 
         return True, "✅ Valid brain MRI detected"
 
     except Exception as e:
         return False, f"❌ Could not read file. Please upload a JPG, PNG, or NIfTI brain MRI scan."
-
 
 # ─────────────────────────────────────────────
 # CSS STYLING — EXACT ORIGINAL DESIGN
