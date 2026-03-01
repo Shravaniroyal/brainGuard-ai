@@ -128,7 +128,8 @@ st.markdown("""
         margin: 0;
     }
     .hero-header p {
-        color: #e0f2fe !important;
+        color: #ffffff !important;
+        opacity: 0.88;
         font-size: 1rem;
         margin: 0.3rem 0 0 0;
     }
@@ -705,7 +706,7 @@ with st.sidebar:
 st.markdown("""
 <div class='hero-header'>
     <h1>🧠 BrainGuard AI</h1>
-    <p>Comprehensive Brain MRI Analysis — Powered by Google Gemma-2-2B (HAI-DEF)</p>
+    <p style="color: #ffffff !important; opacity: 0.9; font-size: 1rem; margin: 0.3rem 0 0 0;">Comprehensive Brain MRI Analysis — Powered by Google Gemma-2-2B (HAI-DEF)</p>
 </div>
 """, unsafe_allow_html=True)
 
