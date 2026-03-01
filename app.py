@@ -1,6 +1,7 @@
 """
 BrainGuard AI - Brain MRI Analysis
 Clean medical design - white background, readable text, brain-themed accents
+v2.1 - validation fix, WM lesions fix, hippocampus fix, hero text fix
 """
 
 import streamlit as st
