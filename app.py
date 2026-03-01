@@ -443,16 +443,28 @@ def measure_hippocampal_volume(mri_data, actual_age):
     seed = int(np.sum(roi) % 10000)
     rng = np.random.RandomState(seed)
     
-    # Normal ~3500-4500 mm³, shrinks with age
-    normal_vol = 4200 - (actual_age - 30) * 10
-    volume = normal_vol + rng.uniform(-400, 200)
-    percent_normal = (volume / 4000) * 100
+    # Age-adjusted expected volume (shrinks ~12mm³/yr after age 30)
+    age_expected = 4200 - (actual_age - 30) * 12
     
-    if percent_normal > 95:
+    # Use ROI tissue density to estimate hippocampal health
+    roi_tissue = np.sum(roi > 40) / roi.size   # ~0.2 (atrophy) to ~0.65 (healthy)
+    roi_std = np.std(roi)
+    
+    # Map tissue density to atrophy factor: 0.2→0.55 (severe), 0.65→0.97 (normal)
+    atrophy_factor = 0.55 + (roi_tissue - 0.20) / (0.65 - 0.20) * 0.42
+    atrophy_factor = float(np.clip(atrophy_factor, 0.50, 0.97))
+    
+    volume = age_expected * atrophy_factor + rng.uniform(-100, 80)
+    volume = float(np.clip(volume, 1600, 4500))
+    
+    # % relative to age-matched normal
+    percent_normal = float(np.clip((volume / age_expected) * 100, 35, 100))
+    
+    if percent_normal > 90:
         status = "🟢 Normal"
-    elif percent_normal > 85:
+    elif percent_normal > 78:
         status = "🟡 Mildly Reduced"
-    elif percent_normal > 75:
+    elif percent_normal > 65:
         status = "🟠 Moderately Reduced"
     else:
         status = "🔴 Severely Reduced"
