@@ -704,7 +704,7 @@ with st.sidebar:
     
     st.markdown("<hr style='border-color:#334155; margin:0.8rem 0;'>", unsafe_allow_html=True)
     st.markdown("<div style='color:#38bdf8; font-weight:600; font-size:0.85rem; margin-bottom:0.5rem;'>✨ KEY FEATURES</div>", unsafe_allow_html=True)
-    features = ["60-second analysis", "Google Gemma-2-2B reports", "Hindi & English output", "₹200 per scan (75x cheaper)", "No specialist required"]
+    features = ["60-second analysis", "Google Gemma-2-2B reports", "Clinical English reports", "₹200 per scan (75x cheaper)", "No specialist required"]
     for f in features:
         st.markdown(f"<div style='color:#94a3b8; font-size:0.8rem; padding:0.2rem 0;'>✅ {f}</div>", unsafe_allow_html=True)
     
@@ -1085,7 +1085,7 @@ with tab2:
         
         <h3 style='color:#0369a1; margin-top:1rem;'>Technology Stack</h3>
         <p>• <strong>Deep Learning:</strong> PyTorch 3D CNN trained on OASIS-1 dataset (235 subjects)</p>
-        <p>• <strong>Clinical Reports:</strong> Google Gemma-2-2B (HAI-DEF) for English + Hindi reports</p>
+        <p>• <strong>Clinical Reports:</strong> Google Gemma-2-2B (HAI-DEF) for English clinical reports</p>
         <p>• <strong>Deployment:</strong> Streamlit Cloud — accessible at brainguard-ai.streamlit.app</p>
         <p>• <strong>Formats:</strong> NIfTI (.nii), DICOM (.dcm), JPG, PNG</p>
         
